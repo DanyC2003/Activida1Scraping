@@ -1,4 +1,4 @@
-from edu_pad.database import Database
+from database import Database
 
 def main():
     print("Ejecutando scraping de productos de Mercado Libre...")

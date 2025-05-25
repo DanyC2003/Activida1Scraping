@@ -48,6 +48,3 @@ class Database:
 
         except Exception as e:
             print("Error al obtener los datos:", e)
-
-dw = Database()
-dw.obtener_datos()

@@ -1,0 +1,41 @@
+name: accionables
+
+on:
+    push:
+        branches:
+          - main
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+
+
+        steps:
+            - name: Paso 1 - Checkout
+              uses: actions/checkout@v4
+
+            - name: Paso 2 - Setup Python
+              uses: actions/setup-python@v5
+              with:
+                    python-version: '3.10'
+            - name: Paso 3 - Crear entorno virtual
+              run: python -m venv venv
+            - name: Paso 4 - Activar entorno virtual
+              run: ./venv/Scripts/activate
+            - name: Paso 5 - Actualizar pip
+              run: pip install --upgrade pip
+            - name: Paso 6 - Instalar dependencias
+              run: pip install -e .
+            - name: Paso 7 - Ejecutar Main
+              run: python src/edu_pad/main.py
+            - name: Commit and Push changes
+              uses: stefanzweifel/git-auto-commit-action@v5
+            - name: Paso 8 - Guardar el commit con el ultimo cambio desde el pipeline
+              uses: stefanzweifel/git-auto-commit-action@v5
+              with:
+                commit_message: "Actividad 2"
+                commit_username: "DanyC2003"
+                commit_user_email: "danielacoronado0109@gmail.com"
+                commit_author: "Daniela Coronado <danielacoronado0109@gmail.com> Y Camilo Olea <camilo.olea@est.iudigital.edu.co>"
+
