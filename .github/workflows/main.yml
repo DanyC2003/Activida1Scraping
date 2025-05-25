@@ -34,6 +34,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Paso 1 - Checkout repo
+        uses: actions/checkout@v4
+      - name: Paso 4 - Activar entorno virtual
+        run: ./venv/Scripts/activate   
       - name: Paso 7 - Ejecutar Script Extractora
         run: python src/edu_pad/main_extractora.py
 
@@ -43,6 +47,10 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Paso 1 - Checkout repo
+        uses: actions/checkout@v4
+      - name: Paso 4 - Activar entorno virtual
+        run: ./venv/Scripts/activate    
       - name: Paso 8 - Ejecutar Script Ingesta
         run: python src/edu_pad/main_ingesta.py
 
