@@ -34,8 +34,8 @@ jobs:
             - name: Paso 8 - Guardar el commit con el ultimo cambio desde el pipeline
               uses: stefanzweifel/git-auto-commit-action@v5
               with:
-                commit_message: "Actividad 2"
-                commit_username: "DanyC2003"
-                commit_user_email: "danielacoronado0109@gmail.com"
-                commit_author: "Daniela Coronado <danielacoronado0109@gmail.com> Y Camilo Olea <camilo.olea@est.iudigital.edu.co>"
+               commit_message: "Actividad 2"
+               commit_user_name: "DanyC2003"
+               commit_user_email: "danielacoronado0109@gmail.com"
+               commit_author: "Daniela Coronado <danielacoronado0109@gmail.com> Y Camilo Olea <camilo.olea@est.iudigital.edu.co>"
 
