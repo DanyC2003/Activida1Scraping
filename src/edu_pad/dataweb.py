@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 class DataWeb:
     def __init__(self):
         self.url = "https://listado.mercadolibre.com.co/smart-watch#D[A:smart%20watch]"
+        self.df = pd.DataFrame()  # Inicializa el DataFrame vacío
+        self.empty = True
 
     def obtener_datos(self):
         datos_productos = []  # Lista para almacenar los datos
@@ -39,12 +41,15 @@ class DataWeb:
                         "Calificaciones": calificacion
                     })
 
-                df = pd.DataFrame(datos_productos)
-                df.to_csv("smartwatch.csv", index=False)
-                print("Datos exportados a 'smartwatch.csv' correctamente.")
+                self.df = pd.DataFrame(datos_productos)
+                self.empty = self.df.empty
 
             else:
                 print("Acceso denegado a la página")
+                self.df = pd.DataFrame()
+                self.empty = True
 
         except Exception as e:
             print("Error al obtener los datos:", e)
+            self.df = pd.DataFrame()
+            self.empty = True
