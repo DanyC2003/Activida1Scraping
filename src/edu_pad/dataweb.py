@@ -18,6 +18,7 @@ class DataWeb:
             respuesta = requests.get(self.url, headers=headers)
             if respuesta.status_code == 200:
                 print("Acceso exitoso a la página")
+                print("Csv generado correctamente")
                 soup = BeautifulSoup(respuesta.text, "html.parser")
 
                 items = soup.select('li.ui-search-layout__item')
