@@ -43,6 +43,7 @@ class DataWeb:
 
                 self.df = pd.DataFrame(datos_productos)
                 self.empty = self.df.empty
+                return self.df
 
             else:
                 print("Acceso denegado a la página")
