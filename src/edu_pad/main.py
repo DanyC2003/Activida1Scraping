@@ -1,9 +1,9 @@
-from database import Database
+from edu_pad.dataweb import DataWeb
 
 def main():
     print("Ejecutando scraping de productos de Mercado Libre...")
-    db = Database()
-    db.obtener_datos()
+    dw = DataWeb()
+    dw.obtener_datos()
     print("Proceso finalizado.")
 
 if __name__ == "__main__":

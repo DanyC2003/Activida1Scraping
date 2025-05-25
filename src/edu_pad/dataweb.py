@@ -2,7 +2,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-class Database:
+class DataWeb:
     def __init__(self):
         self.url = "https://listado.mercadolibre.com.co/smart-watch#D[A:smart%20watch]"
 
@@ -40,8 +40,8 @@ class Database:
                     })
 
                 df = pd.DataFrame(datos_productos)
-                df.to_excel("smartwatch.xlsx", index=False)
-                print("Datos exportados a 'smartwatch.xlsx' correctamente.")
+                df.to_csv("smartwatch.csv", index=False)
+                print("Datos exportados a 'smartwatch.csv' correctamente.")
 
             else:
                 print("Acceso denegado a la página")
