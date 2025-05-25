@@ -49,9 +49,7 @@ jobs:
         run: ./venv/Scripts/activate   
 
       - name: Paso 7 - Ejecutar Script Extractora
-        run: |
-          cd src
-            ../venv/Scripts/python.exe -m edu_pad.main_extractora
+        run: ./venv/Scripts/python.exe src/edu_pad/main_extractora.py
 
 
   run_script:
@@ -71,7 +69,7 @@ jobs:
         run: ./venv/Scripts/activate    
 
       - name: Paso 8 - Ejecutar Script Ingesta
-        run: python src/edu_pad/main_ingesta.py
+        run: ./venv/Scripts/python.exe src/edu_pad/main_ingesta.py
 
 
   auto_commit:
