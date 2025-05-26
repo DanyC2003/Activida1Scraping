@@ -1,10 +1,22 @@
 import pandas as pd
-from edu_pad.database import Database
+import os
+from src.edu_pad.database import Database
 
-def main_2():
+def main():
     db = Database()
-    df = pd.read_csv("src/edu_pad/static/csv/data_extractora.csv")
+    
+    current_dir = os.path.dirname(os.path.abspath(__file__))  # Ruta donde está main_ingesta.py
+    input_csv = os.path.join(current_dir, "static", "csv", "data_extractora.csv")
+    output_csv = os.path.join(current_dir, "static", "csv", "data_bd.csv")
+    
+    if not os.path.exists(input_csv):
+        print("El archivo {} no existe. Ejecuta primero el scraping.".format(input_csv))
+        return
+    
+    df = pd.read_csv(input_csv)
     df_bd = db.guardar_df(df)
     df_bd2 = db.obtener_datos()
-    df_bd2.to_csv("src/edu_pad/static/csv/data_bd.csv", index=False)
+    df_bd2.to_csv(output_csv, index=False)
     
+if __name__ == "__main__":
+    main()

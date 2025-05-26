@@ -1,6 +1,7 @@
 import pandas as pd
 import sqlite3
 import os
+from datetime import datetime
 
 class Database:
     def __init__(self):
@@ -11,13 +12,13 @@ class Database:
         df=df.copy()
         try:
             conn=sqlite3.connect(self.rutadb)
-            df["Create_Date"]="2025-05-25"
-            df["Update_Date"]="2025-05-25"
+            df["Create_Date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            df["Update_Date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             df.to_sql("productos_analisis", conn, if_exists="replace", index=False)
             print("*******************************************************")
             print("Datos Almacenados en la base de datos")
             print("*******************************************************")
-            print("Datos guardados en la base de datos: {})}".format(df.shape))
+            print("Datos guardados en la base de datos: {}".format(df.shape))
             return df
         except Exception as errores:
             print("Error al guardar en la base de datos: {}".format(df.shape))
