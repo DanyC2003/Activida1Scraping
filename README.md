@@ -32,7 +32,7 @@ Después de la Actividad 1, el proyecto evolucionó para incluir:
 - Las alertas se configuran mediante variables de entorno para mayor seguridad.
 
 ### 5. **Ejecución Automática (CI/CD)**
-- Se añadió un workflow de GitHub Actions para ejecutar automáticamente el scraping, la ingesta y el monitoreo cada vez que hay cambios en el repositorio.
+- Se añadió un workflow de GitHub Actions para ejecutar automáticamente  el monitoreo cada vez que hay cambios en el repositorio.
 
 ---
 
@@ -78,22 +78,6 @@ Activida1Scraping/
 ├── .github/workflows/main.yml   # Pipeline de CI/CD
 └── README.md
 ```
-
 ---
-
-- **Automatización con GitHub Actions:**  
-  Solo la parte de ingestación de datos (`main_ingesta.py`) está configurada para ejecutarse automáticamente mediante las acciones de GitHub (CI/CD). Esto significa que, cuando hay un push a la rama principal, el pipeline ejecuta la ingesta de datos de forma automática.
-
-- **Ejecución manual requerida:**  
-  La generación de la base de datos, la lectura, el monitoreo, los cálculos y el envío de alertas **deben ser iniciados manualmente por el usuario** ejecutando el archivo `monitor.py`.  
-  Para hacerlo, usa el siguiente comando desde la carpeta `src`:
-  ```sh
-  python -m edu_pad.monitor
-  ```
-
----
-
-**Importante:**  
-El monitoreo y las alertas NO se ejecutan automáticamente desde GitHub Actions. El usuario debe lanzar el monitoreo manualmente ejecutando desde la carpeta del proyecto al siguiente código: python -m src.edu_pad.monitor
 
 **Este proyecto es una continuación y mejora de la actividad anterior, integrando scraping, almacenamiento, monitoreo y alertas automáticas para el análisis de precios de smartwatches en Colombia.**

@@ -27,8 +27,8 @@ jobs:
         run: pip install --upgrade pip
       - name: Paso 6 - Instalar dependencias
         run: pip install -e .
-      - name: Paso 7 - Ejecutar Main
-        run: python -m src.edu_pad.main_ingesta
+      - name: Paso 7 - Ejecutar Monitor
+        run: python -m src.edu_pad.monitor
       - name: Paso 8 - Guardar el commit con el ultimo cambio desde el pipeline
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
