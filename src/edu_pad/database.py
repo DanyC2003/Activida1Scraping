@@ -5,7 +5,8 @@ from datetime import datetime
 
 class Database:
     def __init__(self):
-        self.rutadb="src/edu_pad/static/db/productos_analisis.db"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.rutadb = os.path.join(current_dir, "static", "db", "productos_analisis.db")
 
     
     def guardar_df(self,df=pd.DataFrame()):

@@ -36,7 +36,7 @@ Después de la Actividad 1, el proyecto evolucionó para incluir:
 
 ---
 
-## ¿Cómo usar el proyecto?
+## ¿Cómo usar el proyecto de forma manual?
 
 1. **Extraer datos de Mercado Libre y guardarlos en CSV:**
    ```sh
