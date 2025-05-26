@@ -5,7 +5,7 @@ from src.edu_pad.database import Database
 def main():
     db = Database()
     
-    current_dir = os.path.dirname(os.path.abspath(__file__))  # Ruta donde está main_ingesta.py
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     input_csv = os.path.join(current_dir, "static", "csv", "data_extractora.csv")
     output_csv = os.path.join(current_dir, "static", "csv", "data_bd.csv")
     

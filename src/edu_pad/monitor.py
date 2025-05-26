@@ -10,8 +10,10 @@ from datetime import datetime
 
 class DatabaseMonitor:
     def __init__(self):
-        self.rutadb = "src/edu_pad/static/db/dolar_analisis.db"
-        self.tabla = "dolar_analisis"
+        os.makedirs("src/edu_pad/static/db", exist_ok=True)
+        os.makedirs("src/edu_pad/static/logs", exist_ok=True)
+        self.rutadb = "src/edu_pad/static/db/productos_analisis.db"
+        self.tabla = "productos_analisis"
         self.ruta_log = "src/edu_pad/static/logs/monitor_log.json"
         
     def verificar_base_datos(self):
@@ -30,85 +32,115 @@ class DatabaseMonitor:
             return False
     
     def contar_registros(self):
-        """Cuenta el número de registros en la tabla y verifica su integridad"""
+        """Cuenta el número de registros en la tabla y verifica su integridad, guardando métricas útiles"""
         try:
             conn = sqlite3.connect(self.rutadb)
             cursor = conn.cursor()
             
-            # Contar registros
+            # Total de registros
             cursor.execute(f"SELECT COUNT(*) FROM {self.tabla}")
             total_registros = cursor.fetchone()[0]
             
-            # Contar registros con valores nulos en columnas importantes
-            cursor.execute(f"SELECT COUNT(*) FROM {self.tabla} WHERE fecha IS NULL OR cerrar IS NULL")
-            registros_nulos = cursor.fetchone()[0]
-            
-            # Obtener fecha del último registro
-            cursor.execute(f"SELECT MAX(fecha_update) FROM {self.tabla}")
+            # Registros nulos en columnas importantes
+            cursor.execute(f"SELECT COUNT(*) FROM {self.tabla} WHERE Calificaciones IS NULL")
+            nulos_calificaciones = cursor.fetchone()[0]
+            cursor.execute(f"SELECT COUNT(*) FROM {self.tabla} WHERE Precios IS NULL")
+            nulos_precios = cursor.fetchone()[0]
+            cursor.execute(f"SELECT COUNT(*) FROM {self.tabla} WHERE Productos IS NULL")
+            nulos_productos = cursor.fetchone()[0]
+    
+            # Última actualización
+            cursor.execute(f"SELECT MAX(Update_Date) FROM {self.tabla}")
             ultima_actualizacion = cursor.fetchone()[0]
-            
+    
+            # Precios para métricas adicionales
+            cursor.execute(f"SELECT Productos, Precios FROM {self.tabla} WHERE Precios IS NOT NULL")
+            registros = cursor.fetchall()
+            precios = []
+            nombres = []
+            for nombre, precio in registros:
+                try:
+                    precio_limpio = str(precio).replace('$', '').replace(',', '').strip()
+                    precio_float = float(precio_limpio)
+                    precios.append(precio_float)
+                    nombres.append(nombre)
+                except Exception:
+                    continue
+    
+            precio_promedio = round(sum(precios) / len(precios), 3) if precios else 0
+            precio_min = min(precios) if precios else 0
+            precio_max = max(precios) if precios else 0
+            precio_promedio = float(f"{precio_promedio:.3f}")
+            precio_min = float(f"{precio_min:.3f}")
+            precio_max = float(f"{precio_max:.3f}")
+    
             conn.close()
-            
-            print(f"Total de registros: {total_registros}")
-            print(f"Registros con valores nulos: {registros_nulos}")
-            print(f"Última actualización: {ultima_actualizacion}")
-            
+          
             return {
                 "total_registros": total_registros,
-                "registros_nulos": registros_nulos,
+                "nulos_calificaciones": nulos_calificaciones,
                 "ultima_actualizacion": ultima_actualizacion,
+                "precio_promedio": precio_promedio,
+                "precio_min": precio_min,
+                "precio_max": precio_max,
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         except Exception as e:
             print(f"ERROR: No se pudo contar registros: {str(e)}")
             return None
     
-    def analizar_tendencia(self):
-        """Analiza la tendencia del dólar basado en los últimos registros"""
+    def analizar_producto(self, nombre_producto):
+        """Analiza un producto específico y muestra su precio y los 3 más cercanos"""
         try:
             conn = sqlite3.connect(self.rutadb)
-            
-            # Obtener los últimos 30 registros ordenados por fecha
-            query = f"""
-            SELECT fecha, cerrar 
-            FROM {self.tabla} 
-            ORDER BY fecha DESC 
-            LIMIT 30
-            """
-            
-            df = pd.read_sql_query(query, conn)
+            cursor = conn.cursor()
+            # Obtener todos los productos y precios
+            cursor.execute(f"SELECT Productos, Precios FROM {self.tabla}")
+            registros = cursor.fetchall()
             conn.close()
-            
-            if len(df) < 5:
-                print("No hay suficientes datos para analizar tendencia")
-                return None
-            
-            # Convertir a numérico para el análisis
-            df['cerrar'] = pd.to_numeric(df['cerrar'], errors='coerce')
-            
-            # Calcular medias móviles
-            df['ma_5'] = df['cerrar'].rolling(window=5).mean()
-            
-            # Determinar tendencia basada en la comparación del último valor con la media móvil
-            ultimo_valor = df['cerrar'].iloc[0]
-            media_movil = df['ma_5'].iloc[0]
-            
-            if ultimo_valor > media_movil * 1.02:
-                tendencia = "ALCISTA"
-            elif ultimo_valor < media_movil * 0.98:
-                tendencia = "BAJISTA"
-            else:
-                tendencia = "ESTABLE"
-                
-            print(f"Análisis de tendencia: {tendencia}")
-            return {
-                "ultimo_valor": ultimo_valor,
-                "media_movil_5": media_movil,
-                "tendencia": tendencia
-            }
+    
+            # Limpiar y convertir precios
+            productos = []
+            for nombre, precio in registros:
+                try:
+                    precio_limpio = str(precio).replace('$', '').replace(',', '').strip()
+                    precio_float = float(precio_limpio)
+                    productos.append({"nombre": nombre, "precio": precio_float})
+                except Exception:
+                    continue
+    
+            if not productos:
+                print("No se encontraron productos con precios válidos.")
+                return
+    
+            # Calcular precio promedio
+            precios = [p["precio"] for p in productos]
+            precio_promedio = sum(precios) / len(precios)
+            print(f"Precio promedio de todos los relojes: ${precio_promedio:.2f}")
+    
+            # Buscar producto específico
+            producto_objetivo = None
+            for p in productos:
+                if nombre_producto.lower() in p["nombre"].lower():
+                    producto_objetivo = p
+                    break
+    
+            if not producto_objetivo:
+                print(f"No se encontró el producto '{nombre_producto}'.")
+                return
+    
+            print(f"\nProducto encontrado: {producto_objetivo['nombre']}")
+            print(f"Precio exacto: ${producto_objetivo['precio']:.2f}")
+    
+            # Buscar los 3 productos más cercanos en precio (excluyendo el objetivo)
+            productos_otros = [p for p in productos if p != producto_objetivo]
+            productos_otros.sort(key=lambda x: abs(x["precio"] - producto_objetivo["precio"]))
+            print("\nOtros 3 productos con precio más cercano:")
+            for cercano in productos_otros[:3]:
+                print(f"- {cercano['nombre']} | Precio: ${cercano['precio']:.2f}")
+    
         except Exception as e:
-            print(f"ERROR: No se pudo analizar tendencia: {str(e)}")
-            return None
+            print(f"ERROR: {e}")
     
     def guardar_log(self, metricas):
         """Guarda las métricas en un archivo log JSON"""
@@ -147,11 +179,11 @@ class DatabaseMonitor:
         """Envía una alerta por correo electrónico (configurado mediante variables de entorno)"""
         try:
             # Obtener configuración de correo de variables de entorno
-            email_emisor = os.environ.get('EMAIL_SENDER')
-            email_receptor = os.environ.get('EMAIL_RECEIVER')
-            email_password = os.environ.get('EMAIL_PASSWORD')
-            smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
-            smtp_port = int(os.environ.get('SMTP_PORT', 587))
+            email_emisor = "daniela.coronado@est.iudigital.edu.co"
+            email_receptor = "andres.callejas@iudigital.edu.co"
+            email_password = "tmvx clcv vcrx jwzx"
+            smtp_server = "smtp.gmail.com"
+            smtp_port = 587
             
             if not all([email_emisor, email_receptor, email_password]):
                 print("ADVERTENCIA: No se enviará alerta por correo. Faltan credenciales.")
@@ -201,36 +233,50 @@ class DatabaseMonitor:
                 f"No se pudo obtener métricas de la tabla {self.tabla}. Fecha: {datetime.now()}"
             )
             return False
-        
-        # Analizar tendencia
-        tendencia = self.analizar_tendencia()
-        if tendencia:
-            metricas.update(tendencia)
-        
+    
+        # Obtener los 4 productos más baratos
+        try:
+            conn = sqlite3.connect(self.rutadb)
+            cursor = conn.cursor()
+            cursor.execute(f"SELECT Productos, Precios FROM {self.tabla}")
+            registros = cursor.fetchall()
+            conn.close()
+    
+            productos = []
+            for nombre, precio in registros:
+                try:
+                    precio_limpio = str(precio).replace('$', '').replace(',', '').strip()
+                    precio_float = float(precio_limpio)
+                    productos.append({"nombre": nombre, "precio": precio_float})
+                except Exception:
+                    continue
+    
+            productos.sort(key=lambda x: x["precio"])
+            top4 = productos[:4]
+        except Exception as e:
+            print(f"ERROR al obtener productos más baratos: {e}")
+            top4 = []
+    
         # Guardar log
         self.guardar_log(metricas)
-        
-        # Verificar alertas basadas en métricas
-        if metricas.get("registros_nulos", 0) > 0:
+    
+        # Enviar alerta con los 4 productos más baratos
+        if top4:
+            mensaje = " TOP 4 Smartwatches con mejor precio:\n"
+            for i, prod in enumerate(top4):
+                mensaje += f"{i+1}. {prod['nombre']} - ${prod['precio']:.3f} COP\n"                
             self.enviar_alerta(
-                "ALERTA: Registros con valores nulos", 
-                f"Se detectaron {metricas['registros_nulos']} registros con valores nulos en la tabla {self.tabla}."
+                "INFO: Productos con mejor precio",
+                mensaje
             )
-        
-        # Si hay una tendencia fuerte, enviar alerta informativa
-        if tendencia and tendencia.get("tendencia") != "ESTABLE":
-            self.enviar_alerta(
-                f"INFO: Tendencia del dólar {tendencia['tendencia']}", 
-                f"Se ha detectado una tendencia {tendencia['tendencia']} en el valor del dólar.\n" +
-                f"Último valor: {tendencia['ultimo_valor']}\n" +
-                f"Media móvil (5 días): {tendencia['media_movil_5']}"
-            )
-        
+            print(mensaje)
+        else:
+            print("No se encontraron productos válidos para la alerta de mejores precios.")
+    
         print("*******************************************************************")
         print(f"Fin de monitoreo: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print("*******************************************************************")
         return True
-
 
 if __name__ == "__main__":
     monitor = DatabaseMonitor()
