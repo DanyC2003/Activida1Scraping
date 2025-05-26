@@ -10,7 +10,6 @@ jobs:
     permissions:
       contents: write
 
-
     steps:
       - name: Paso 1 - Checkout repo
         uses: actions/checkout@v4
@@ -19,23 +18,23 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9.2'
-      - name: Paso 3 - Crea entorno virtual
-        run: python -m venv venv
-      - name: Paso 4 - Activar entorno virtual
-        run: ./venv/Scripts/activate   
-      - name: Paso 5 - Actualizar pip
-        run: pip install --upgrade pip
-      - name: Paso 6 - Instalar dependencias
-        run: pip install -e .
-      - name: Paso 7 - Ejecutar Main
-        run: python edu_pad/main_ingesta.py
-      - name: Paso 8 - Guardar el commit con el ultimo cambio desde el pipeline
+
+      - name: Paso 3 - Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Paso 4 - Ejecutar Main
+        run: python -m src.edu_pad.main_ingesta
+
+      - name: Paso 5 - Guardar el commit con el ultimo cambio desde el pipeline
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Actividad 2"
           commit_user_name: "DanyC2003"
           commit_user_email: "danielacoronado0109@gmail.com"
           commit_author: "Daniela Coronado <daniela.coronado@est.iudigital.edu.co> Y Camilo Olea <camilo.olea@est.iudigital.edu.co>"
+
       
 #  test:
 #    name: Extrator
