@@ -23,7 +23,7 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}/static/csv":/Activida1Scraping/static/csv \
             -v "${{ github.workspace }}/static/db":/Activida1Scraping/static/db \
-            contenedor edu_pad.main_extractor
+            contenedor edu_pad.main_extractora
 
       - name: Paso 5 - Ejecutar ingesta
         run: |
