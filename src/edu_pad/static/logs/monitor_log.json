@@ -53,6 +53,15 @@
       "precio_min": 28.99,
       "precio_max": 999.9,
       "timestamp": "2025-06-07 22:05:33"
+    },
+    {
+      "total_registros": 52,
+      "nulos_calificaciones": 0,
+      "ultima_actualizacion": "2025-06-07 22:35:39",
+      "precio_promedio": 310.136,
+      "precio_min": 26.1,
+      "precio_max": 999.95,
+      "timestamp": "2025-06-07 22:36:42"
     }
   ]
 }
