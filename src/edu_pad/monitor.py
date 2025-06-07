@@ -183,8 +183,15 @@ class DatabaseMonitor:
             email_receptor = os.environ.get('EMAIL_RECEIVER')
             email_password = os.environ.get('EMAIL_PASSWORD')
             smtp_server = os.environ.get('SMTP_SERVER')
-            smtp_port = os.environ.get('SMTP_PORT')
-            
+            smtp_port_str = os.environ.get('SMTP_PORT')
+            print(f"SMTP_PORT obtenido: {smtp_port_str}")  # Debug temporal
+
+            if not smtp_port_str:
+                print("ADVERTENCIA: No se enviará alerta. SMTP_PORT no definido.")
+                return False
+
+            smtp_port = int(smtp_port_str)
+
             if not all([email_emisor, email_receptor, email_password]):
                 print("ADVERTENCIA: No se enviará alerta por correo. Faltan credenciales.")
                 return False
