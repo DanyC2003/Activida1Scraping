@@ -14,4 +14,4 @@ ENV PYTHONPATH="/Activida1Scraping/src"
 
 ENTRYPOINT ["python", "-m"]
 
-CMD ["edu_pad.main_extractora"]
+CMD ["edu_pad.monitor"]
