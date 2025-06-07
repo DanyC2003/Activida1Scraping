@@ -182,8 +182,8 @@ class DatabaseMonitor:
             email_emisor = os.environ.get('EMAIL_SENDER')
             email_receptor = os.environ.get('EMAIL_RECEIVER')
             email_password = os.environ.get('EMAIL_PASSWORD')
-            smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
-            smtp_port = int(os.environ.get('SMTP_PORT', 587))
+            smtp_server = os.environ.get('SMTP_SERVER')
+            smtp_port = os.environ.get('SMTP_PORT')
             
             if not all([email_emisor, email_receptor, email_password]):
                 print("ADVERTENCIA: No se enviará alerta por correo. Faltan credenciales.")
