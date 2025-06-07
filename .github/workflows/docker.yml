@@ -34,7 +34,7 @@ jobs:
 
       - name: Paso 6 - Ejecutar Monitor
         run: |
-            docker run --rm \
+          docker run --rm \
             -v "${{ github.workspace }}/static/csv":/Activida1Scraping/static/csv \
             -v "${{ github.workspace }}/static/db":/Activida1Scraping/static/db \
             -v "${{ github.workspace }}/static/logs":/Activida1Scraping/static/logs \
