@@ -179,11 +179,11 @@ class DatabaseMonitor:
         """Envía una alerta por correo electrónico (configurado mediante variables de entorno)"""
         try:
             # Obtener configuración de correo de variables de entorno
-            email_emisor = "daniela.coronado@est.iudigital.edu.co"
-            email_receptor = "andres.callejas@iudigital.edu.co"
-            email_password = "tmvx clcv vcrx jwzx"
-            smtp_server = "smtp.gmail.com"
-            smtp_port = 587
+            email_emisor = os.environ.get('EMAIL_SENDER')
+            email_receptor = os.environ.get('EMAIL_RECEIVER')
+            email_password = os.environ.get('EMAIL_PASSWORD')
+            smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+            smtp_port = int(os.environ.get('SMTP_PORT', 587))
             
             if not all([email_emisor, email_receptor, email_password]):
                 print("ADVERTENCIA: No se enviará alerta por correo. Faltan credenciales.")

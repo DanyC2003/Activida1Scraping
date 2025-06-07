@@ -6,7 +6,7 @@ setup(
     author='Daniela Coronado, Camilo Olea',
     author_email= ['daniela.coronado@est.iudigital.edu.co', 'camilo.olea@est.iudigital.edu.co'],
     description='Web scraping project for IUDigital',
-    py_modules=['Activity1_Scraping'],
+    py_modules=['Actividad1', 'Actividad2', 'Actividad3'],
     install_requires=[
         "pandas",
         "openpyxl",
