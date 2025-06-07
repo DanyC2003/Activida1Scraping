@@ -182,9 +182,13 @@ class DatabaseMonitor:
             email_emisor = os.environ.get('EMAIL_SENDER')
             email_receptor = os.environ.get('EMAIL_RECEIVER')
             email_password = os.environ.get('EMAIL_PASSWORD')
-            smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+            smtp_server = os.environ.get('SMTP_SERVER')
             smtp_port = int(os.environ.get('SMTP_PORT', 587))
-            print(f"SMTP_PORT obtenido: {smtp_port}")  # Debug temporal
+            print(f"SMTP_PORT obtenido: {smtp_port}")
+            print(f"SMTP_SERVER obtenido: {smtp_server}")
+            print(f"EMAIL_SENDER obtenido: {email_emisor}")
+            print(f"EMAIL_RECEIVER obtenido: {email_receptor}")
+            print(f"EMAIL_PASSWORD obtenido: {email_password}")
 
             if not smtp_port:
                 print("ADVERTENCIA: No se enviará alerta. SMTP_PORT no definido.")

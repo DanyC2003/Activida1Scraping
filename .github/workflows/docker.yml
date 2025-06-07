@@ -34,7 +34,12 @@ jobs:
 
       - name: Paso 6 - Ejecutar Monitor
         run: |
-          docker run --rm \
+            docker run --rm \
             -v "${{ github.workspace }}/static/csv":/Activida1Scraping/static/csv \
             -v "${{ github.workspace }}/static/db":/Activida1Scraping/static/db \
+            -e EMAIL_SENDER=${{ secrets.EMAIL_SENDER }} \
+            -e EMAIL_RECEIVER=${{ secrets.EMAIL_RECEIVER }} \
+            -e EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
+            -e SMTP_SERVER=${{ secrets.SMTP_SERVER }} \
+            -e SMTP_PORT=${{ secrets.SMTP_PORT }} \
             contenedor edu_pad.monitor
