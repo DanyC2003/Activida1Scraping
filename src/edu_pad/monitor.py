@@ -183,7 +183,7 @@ class DatabaseMonitor:
             email_receptor = os.environ.get('EMAIL_RECEIVER')
             email_password = os.environ.get('EMAIL_PASSWORD')
             smtp_server = os.environ.get('SMTP_SERVER')
-            smtp_port = int(os.environ.get('SMTP_PORT', 587))
+            smtp_port = int(os.environ.get('SMTP_PORT'))
             print(f"SMTP_PORT obtenido: {smtp_port}")
             print(f"SMTP_SERVER obtenido: {smtp_server}")
             print(f"EMAIL_SENDER obtenido: {email_emisor}")
