@@ -1,3 +1,9 @@
 FROM python:3.9-slim
-COPY pruebadocker.py .
-CMD [ "python", "pruebadocker.py" ]
+
+WORKDIR /Activida1Scraping
+
+COPY setup.py .
+
+RUN pip install -e .
+
+CMD [ "python", "setup.py" ]
