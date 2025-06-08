@@ -45,11 +45,4 @@ jobs:
             -e EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
             -e SMTP_SERVER=${{ secrets.SMTP_SERVER }} \
             -e SMTP_PORT=${{ secrets.SMTP_PORT }} \
-            contenedor edu_pad.monitor
-      - name: Verificar secrets
-        run: |
-          echo "EMAIL SENDER: ${{ secrets.EMAIL_SENDER }}"
-          echo "EMAIL RECEIVER: ${{ secrets.EMAIL_RECEIVER }}"
-          echo "EMAIL PASSWORD: ${{ secrets.EMAIL_PASSWORD }}"
-          echo "SMTP SERVER: ${{ secrets.SMTP_SERVER }}"
-          echo "SMTP PORT: ${{ secrets.SMTP_PORT }}"
+            contenedor edu_pad.monitor
