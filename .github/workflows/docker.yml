@@ -34,9 +34,10 @@ jobs:
             -v "${{ github.workspace }}/static/db":/Activida1Scraping/static/db \
             contenedor edu_pad.main_ingesta
 
-      - name: Diagnóstico - Ejecutar bash interactivo
+      - name: Paso 6 - Ejecutar Monitor
         run: |
-          docker run --rm -v "${{ github.workspace }}/static/csv":/Activida1Scraping/static/csv \
+          docker run --rm \
+            -v "${{ github.workspace }}/static/csv":/Activida1Scraping/static/csv \
             -v "${{ github.workspace }}/static/db":/Activida1Scraping/static/db \
             -v "${{ github.workspace }}/static/logs":/Activida1Scraping/static/logs \
             -e EMAIL_SENDER=${{ secrets.EMAIL_SENDER }} \
@@ -44,4 +45,4 @@ jobs:
             -e EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }} \
             -e SMTP_SERVER=${{ secrets.SMTP_SERVER }} \
             -e SMTP_PORT=${{ secrets.SMTP_PORT }} \
-            contenedor python -m edu_pad.monitor
+            contenedor edu_pad.monitor
